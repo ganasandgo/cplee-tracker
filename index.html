@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>California CPLEE Pass Rates — Ganas & Go</title>
+<meta property="og:title" content="California CPLEE Pass Rates — updated monthly">
+<meta property="og:description" content="Pass rates for California's Psychology Laws and Ethics Examination, including the repeat test-taker rates the Board doesn't publish. Straight from the Board's own data, updated automatically.">
+<meta name="description" content="Pass rates for California's Psychology Laws and Ethics Examination, including the repeat test-taker rates the Board doesn't publish. Straight from the Board's own data, updated automatically.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root{
+    --paper:#EFF4F5;
+    --surface:#FFFFFF;
+    --ink:#1D4B5F;
+    --ink-soft:#567586;
+    --ink-faint:#8CA4AF;
+    --hairline:#D3E0E3;
+    --iris:#2F7C8C;
+    --iris-soft:rgba(47,124,140,0.12);
+    --marigold:#D98C6A;
+    --marigold-soft:rgba(217,140,106,0.12);
+    --rose:#B23A48;
+    --dash:#6E8C96;
+    --radius:14px;
+    --font-display:'Poppins', -apple-system, sans-serif;
+    --font-body:'Nunito Sans', -apple-system, sans-serif;
+    --font-mono:'Spline Sans Mono', 'Courier New', monospace;
+    --shadow:0 1px 2px rgba(35,33,53,0.05), 0 6px 20px rgba(35,33,53,0.05);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1060px;margin:0 auto;padding:2.75rem 1.5rem 3rem;}
+
+  /* ---------- Brand bar ---------- */
+  .brand-bar{
+    margin:-0.9rem 0 1.6rem;
+  }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:0.45rem;
+    font-family:var(--font-display);
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink);
+    text-decoration:none;
+    background:var(--surface);
+    border:1.5px solid var(--iris);
+    border-radius:999px;
+    padding:0.45rem 1rem;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .back-link:hover{
+    background:var(--iris);
+    color:#FFFFFF;
+  }
+
+  /* ---------- Header ---------- */
+  .eyebrow{
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.13em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 0.65rem;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(2rem, 4.5vw, 2.9rem);
+    letter-spacing:-0.015em;
+    line-height:1.1;
+    margin:0 0 0.55rem;
+  }
+  h1 em{
+    font-style:normal;
+    color:var(--iris);
+  }
+  .subtitle{
+    font-size:0.98rem;
+    color:var(--ink-soft);
+    max-width:44rem;
+    margin:0 0 1.15rem;
+  }
+  .meta-row{display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;}
+  .chip{
+    display:inline-flex;align-items:center;gap:0.45rem;
+    font-size:0.78rem;color:var(--ink-soft);
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:999px;
+    padding:0.34rem 0.8rem;
+  }
+  .chip a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink-faint);}
+  .chip a:hover{border-bottom-color:var(--ink);}
+  .pulse{width:6px;height:6px;border-radius:50%;background:var(--iris);flex-shrink:0;}
+  @media (prefers-reduced-motion: no-preference){
+    .pulse{animation:pulse 2.6s ease-in-out infinite;}
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+  /* ---------- Signature: the scale band ---------- */
+  .scale-card{
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:1.5rem 1.7rem 1.35rem;
+    margin:2rem 0 1.75rem;
+  }
+  .scale-card h2{
+    font-family:var(--font-display);
+    font-size:1.15rem;
+    font-weight:600;
+    margin:0 0 0.2rem;
+  }
+  .scale-card .scale-sub{
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    margin:0 0 2.6rem;
+  }
+  .scale{
+    position:relative;
+    height:10px;
+    border-radius:999px;
+    background:linear-gradient(to right, #EBEAF2, #E3E2EC);
+    margin:0 0.4rem;
+  }
+  .scale-range{
+    position:absolute;top:0;bottom:0;
+    background:var(--iris-soft);
+    border-left:1px solid rgba(47,124,140,0.35);
+    border-right:1px solid rgba(47,124,140,0.35);
+  }
+  .scale-avg{
+    position:absolute;top:-7px;bottom:-7px;
+    width:0;
+    border-left:2px dashed var(--dash);
+  }
+  .scale-now{
+    position:absolute;top:50%;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--iris);
+    border:3px solid var(--surface);
+    box-shadow:0 0 0 1.5px var(--iris), 0 2px 6px rgba(35,33,53,0.25);
+    transform:translate(-50%,-50%);
+  }
+  .scale-label{
+    position:absolute;
+    font-size:0.74rem;
+    white-space:nowrap;
+    transform:translateX(-50%);
+  }
+  .scale-label .val{
+    font-family:var(--font-mono);
+    font-weight:600;
+    color:var(--ink);
+  }
+  .scale-label.above{bottom:calc(100% + 12px);}
+  .scale-label.above::after{
+    content:"";
+    position:absolute;top:100%;left:50%;
+    transform:translateX(-50%);
+    border:5px solid transparent;
+    border-top-color:var(--iris);
+  }
+  .scale-label.below{top:calc(100% + 12px);color:var(--ink-soft);}
+  .scale-ticks{
+    display:flex;justify-content:space-between;
+    margin:2.4rem 0.4rem 0;
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    color:var(--ink-faint);
+  }
+  .scale-note{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin:1rem 0 0;
+  }
+  .scale-note strong{color:var(--ink);font-weight:600;}
+
+  /* ---------- KPI strip ---------- */
+  .kpi-strip{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    margin-bottom:1.75rem;
+  }
+  .kpi{
+    padding:1.2rem 1.35rem;
+    border-left:1px solid var(--hairline);
+  }
+  .kpi:first-child{border-left:none;}
+  .kpi-label{
+    font-size:0.69rem;font-weight:600;
+    letter-spacing:0.09em;text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:0.5rem;
+  }
+  .kpi-value{
+    font-family:var(--font-mono);
+    font-size:1.85rem;font-weight:600;line-height:1;
+  }
+  .kpi-value.iris{color:var(--iris);}
+  .kpi-value.marigold{color:var(--marigold);}
+  .kpi-delta{margin-top:0.5rem;font-size:0.76rem;font-family:var(--font-mono);}
+  .kpi-delta.up{color:#3E7A4E;}
+  .kpi-delta.down{color:var(--rose);}
+  .kpi-delta.flat{color:var(--ink-faint);}
+  @media (max-width:760px){
+    .kpi-strip{grid-template-columns:repeat(2,1fr);}
+    .kpi:nth-child(3){border-left:none;}
+    .kpi:nth-child(3),.kpi:nth-child(4){border-top:1px solid var(--hairline);}
+  }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:1.6rem 1.7rem 1.5rem;
+    margin-bottom:1.75rem;
+  }
+  .card-head{
+    display:flex;flex-wrap:wrap;
+    justify-content:space-between;align-items:baseline;
+    gap:0.75rem;margin-bottom:1.15rem;
+  }
+  .card-head h2{
+    font-family:var(--font-display);
+    font-size:1.3rem;font-weight:600;margin:0;
+  }
+  .legend{display:flex;gap:1rem;font-size:0.78rem;color:var(--ink-soft);flex-wrap:wrap;}
+  .legend span{display:inline-flex;align-items:center;gap:0.4rem;}
+  .swatch{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  .swatch.bar{background:var(--iris);}
+  .swatch.line{background:var(--marigold);}
+  .swatch.dash{width:14px;height:0;border-top:2px dashed var(--dash);border-radius:0;}
+  .swatch.rpt{width:14px;height:0;border-top:2px dotted var(--rose);border-radius:0;}
+  .kpi-value.rose{color:var(--rose);}
+  .repeat-intro{font-size:0.9rem;color:var(--ink-soft);margin:0 0 1.25rem;max-width:44rem;}
+  .repeat-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;background:var(--hairline);
+    border:1px solid var(--hairline);border-radius:10px;overflow:hidden;
+    margin-bottom:1.1rem;
+  }
+  .repeat-stat{background:var(--surface);padding:1.1rem 1.25rem;}
+  @media (max-width:760px){.repeat-grid{grid-template-columns:1fr;}}
+  .chart-box{position:relative;height:320px;}
+  .chart-caption{font-size:0.82rem;color:var(--ink-soft);margin-top:0.9rem;}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+
+  /* ---------- Detail layout ---------- */
+  .detail-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:1.75rem;align-items:start;
+  }
+  @media (max-width:860px){.detail-grid{grid-template-columns:1fr;}}
+  table.data-table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+  table.data-table caption{
+    text-align:left;font-size:0.78rem;color:var(--ink-soft);margin-bottom:0.5rem;
+  }
+  table.data-table th, table.data-table td{
+    padding:0.45rem 0.55rem;
+    border-bottom:1px solid var(--hairline);
+    text-align:right;
+  }
+  table.data-table th:first-child, table.data-table td:first-child{text-align:left;}
+  table.data-table th{
+    font-size:0.69rem;letter-spacing:0.05em;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:600;
+  }
+  table.data-table td{font-family:var(--font-mono);}
+  table.data-table td:first-child{font-family:var(--font-body);}
+  table.data-table tr.total-row td{
+    font-weight:600;
+    border-top:1.5px solid var(--ink-faint);
+    border-bottom:none;
+  }
+
+  footer{
+    margin-top:1.5rem;padding-top:1.5rem;
+    border-top:1px solid var(--hairline);
+    font-size:0.8rem;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:0.75rem;
+  }
+  footer a{color:var(--ink-soft);}
+
+  .error-banner{
+    display:none;
+    background:rgba(178,58,72,0.08);
+    border:1px solid var(--rose);
+    color:var(--rose);
+    border-radius:var(--radius);
+    padding:0.85rem 1.1rem;
+    font-size:0.85rem;
+    margin-bottom:1.5rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand-bar">
+    <a class="back-link" href="https://www.mindfulepppjourney.com/">← Back to Ganas &amp; Go!</a>
+  </div>
+
+  <header>
+    <p class="eyebrow">California Board of Psychology · Official Statistics</p>
+    <h1>What are the CPLEE pass rates <em>right now?</em></h1>
+    <p class="subtitle">Pass rates for the California Psychology Laws and Ethics Examination — month by month, year by year, straight from the Board's published data.</p>
+    <div class="meta-row">
+      <span class="chip"><span class="pulse"></span><span id="updated-text">Loading…</span></span>
+      <span class="chip">Source: <a href="https://www.psychology.ca.gov/applicants/exams/statistics.shtml" target="_blank" rel="noopener">psychology.ca.gov</a></span>
+    </div>
+  </header>
+
+  <div class="error-banner" id="error-banner">
+    Couldn't load the latest data file, so this is showing the most recent figures baked into the page instead.
+  </div>
+
+  <section class="scale-card" aria-describedby="scale-sr">
+    <h2 id="scale-title">Where this year stands</h2>
+    <p class="scale-sub" id="scale-sub">Current year-to-date pass rate, plotted against every year the Board has on record.</p>
+    <div class="scale" aria-hidden="true">
+      <div class="scale-range" id="scale-range"></div>
+      <div class="scale-avg" id="scale-avg"></div>
+      <div class="scale-label above" id="scale-now-label"></div>
+      <div class="scale-now" id="scale-now"></div>
+      <div class="scale-label below" id="scale-avg-label"></div>
+    </div>
+    <div class="scale-ticks" aria-hidden="true">
+      <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+    </div>
+    <p class="scale-note" id="scale-note"></p>
+    <p class="sr-only" id="scale-sr"></p>
+  </section>
+
+  <section class="kpi-strip" aria-label="Key statistics">
+    <div class="kpi">
+      <div class="kpi-label" id="kpi1-label">Year overall pass rate</div>
+      <div class="kpi-value iris" id="kpi1-value">—</div>
+      <div class="kpi-delta" id="kpi1-delta"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label" id="kpi2-label">First-time pass rate</div>
+      <div class="kpi-value marigold" id="kpi2-value">—</div>
+      <div class="kpi-delta" id="kpi2-delta"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Latest month reported</div>
+      <div class="kpi-value" id="kpi3-value">—</div>
+      <div class="kpi-delta" id="kpi3-delta"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">All-time average</div>
+      <div class="kpi-value" id="kpi4-value">—</div>
+      <div class="kpi-delta" id="kpi4-delta"></div>
+    </div>
+  </section>
+
+  <section class="card" id="repeat-card">
+    <div class="card-head">
+      <h2>Repeat test-takers: the unpublished rates</h2>
+    </div>
+    <p class="repeat-intro">The Board publishes overall and first-time pass rates, but we never see the pass rate for people retaking the exam. Subtracting first-timers from the Board's own totals reveals the pass rates for multiple/repeat test-takers. This data is important to know in order to address the needs of multiple test-takers and validate their experiences.</p>
+    <div class="repeat-grid">
+      <div class="repeat-stat">
+        <div class="kpi-label" id="rp1-label">Repeat-taker pass rate</div>
+        <div class="kpi-value rose" id="rp1-value">—</div>
+        <div class="kpi-delta flat" id="rp1-sub"></div>
+      </div>
+      <div class="repeat-stat">
+        <div class="kpi-label">All-time repeat-taker rate</div>
+        <div class="kpi-value rose" id="rp2-value">—</div>
+        <div class="kpi-delta flat" id="rp2-sub"></div>
+      </div>
+      <div class="repeat-stat">
+        <div class="kpi-label" id="rp3-label">First-timers' advantage</div>
+        <div class="kpi-value" id="rp3-value">—</div>
+        <div class="kpi-delta flat" id="rp3-sub"></div>
+      </div>
+    </div>
+    <p class="chart-caption" id="repeat-note"></p>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2 id="yearly-title">Yearly overview</h2>
+      <div class="legend">
+        <span><span class="swatch bar"></span>Overall pass rate</span>
+        <span><span class="swatch line"></span>First-time pass rate</span>
+        <span><span class="swatch rpt"></span>Repeat-taker pass rate</span>
+        <span><span class="swatch dash"></span>All-time average</span>
+      </div>
+    </div>
+    <div class="chart-box">
+      <canvas id="yearlyChart" role="img" aria-describedby="yearly-sr"></canvas>
+    </div>
+    <p class="sr-only" id="yearly-sr"></p>
+    <p class="chart-caption">The dashed line marks the all-time average, so each year's position above or below the historical norm is visible at a glance. First-time and repeat-taker breakdowns begin in 2009, when the Board started publishing first-timer counts. The most recent year is year-to-date and keeps filling in as the Board reports new months. <strong>Read 2008&ndash;2015 with care:</strong> the CPLEE launched in May 2008 as a limited-use exam sat by only a handful of candidates a month, and did not become the exam every California applicant takes until it replaced the CPSE on July 1, 2015. Percentages from those early years rest on very small numbers.</p>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2 id="current-year-title">Year in progress</h2>
+      <div class="legend">
+        <span><span class="swatch bar"></span>Overall pass rate</span>
+        <span><span class="swatch line"></span>First-time pass rate</span>
+        <span><span class="swatch rpt"></span>Repeat-taker pass rate</span>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div>
+        <div class="chart-box" style="height:300px;">
+          <canvas id="currentYearChart" role="img" aria-describedby="current-sr"></canvas>
+        </div>
+        <p class="sr-only" id="current-sr"></p>
+      </div>
+      <div>
+        <table class="data-table" id="month-table">
+          <caption>Exact figures behind the chart</caption>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Candidates</th>
+              <th>% Passed</th>
+              <th>% First-time</th>
+              <th>% Repeat</th>
+            </tr>
+          </thead>
+          <tbody id="month-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Data: California Board of Psychology, <a href="https://www.psychology.ca.gov/applicants/exams/statistics.shtml" target="_blank" rel="noopener">official statistics page</a>. Year-to-date figures are provisional and may be revised by the Board.</span>
+    <span>The Board posts new numbers monthly · this page checks weekly.</span>
+  </footer>
+
+</div>
+
+<script>
+// Fallback data baked directly into the page so it still renders
+// something useful even if data/cplee_stats.json can't be fetched
+// (e.g. when this file is opened standalone rather than served
+// alongside the rest of the repo).
+const FALLBACK_DATA = {"source_url": "https://www.psychology.ca.gov/applicants/exams/statistics.shtml", "last_updated": "2026-07-23T00:00:00Z", "years": {"2008": {"complete": false, "months": [{"month": "May", "candidates": 5, "passed": 5, "pct_passed": 100.0, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}, {"month": "June", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}, {"month": "July", "candidates": 11, "passed": 6, "pct_passed": 54.55, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}, {"month": "August", "candidates": 5, "passed": 3, "pct_passed": 60.0, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}, {"month": "September", "candidates": 6, "passed": 2, "pct_passed": 33.33, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}, {"month": "October", "candidates": 5, "passed": 4, "pct_passed": 80.0, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}, {"month": "November", "candidates": 2, "passed": 1, "pct_passed": 50.0, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}, {"month": "December", "candidates": 2, "passed": 2, "pct_passed": 100.0, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}], "total": {"candidates": 45, "passed": 28, "pct_passed": 62.22, "first_timers": null, "first_time_passed": null, "pct_first_time_passed": null}}, "2009": {"complete": true, "months": [{"month": "January", "candidates": 7, "passed": 4, "pct_passed": 57.14, "first_timers": 6, "first_time_passed": 3, "pct_first_time_passed": 50.0}, {"month": "February", "candidates": 5, "passed": 5, "pct_passed": 100.0, "first_timers": 4, "first_time_passed": 4, "pct_first_time_passed": 100.0}, {"month": "March", "candidates": 8, "passed": 5, "pct_passed": 62.5, "first_timers": 7, "first_time_passed": 4, "pct_first_time_passed": 57.14}, {"month": "April", "candidates": 10, "passed": 5, "pct_passed": 50.0, "first_timers": 8, "first_time_passed": 4, "pct_first_time_passed": 50.0}, {"month": "May", "candidates": 1, "passed": 1, "pct_passed": 100.0, "first_timers": 1, "first_time_passed": 1, "pct_first_time_passed": 100.0}, {"month": "June", "candidates": 7, "passed": 4, "pct_passed": 57.14, "first_timers": 7, "first_time_passed": 4, "pct_first_time_passed": 57.14}, {"month": "July", "candidates": 7, "passed": 5, "pct_passed": 71.43, "first_timers": 6, "first_time_passed": 5, "pct_first_time_passed": 83.33}, {"month": "August", "candidates": 5, "passed": 4, "pct_passed": 80.0, "first_timers": 4, "first_time_passed": 3, "pct_first_time_passed": 75.0}, {"month": "September", "candidates": 3, "passed": 2, "pct_passed": 66.67, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "October", "candidates": 8, "passed": 5, "pct_passed": 62.5, "first_timers": 4, "first_time_passed": 2, "pct_first_time_passed": 50.0}, {"month": "November", "candidates": 6, "passed": 4, "pct_passed": 66.67, "first_timers": 5, "first_time_passed": 3, "pct_first_time_passed": 60.0}, {"month": "December", "candidates": 5, "passed": 2, "pct_passed": 40.0, "first_timers": 4, "first_time_passed": 2, "pct_first_time_passed": 50.0}], "total": {"candidates": 72, "passed": 46, "pct_passed": 63.89, "first_timers": 59, "first_time_passed": 37, "pct_first_time_passed": 62.71}}, "2010": {"complete": true, "months": [{"month": "January", "candidates": 6, "passed": 2, "pct_passed": 33.33, "first_timers": 5, "first_time_passed": 1, "pct_first_time_passed": 20.0}, {"month": "February", "candidates": 6, "passed": 2, "pct_passed": 33.33, "first_timers": 6, "first_time_passed": 2, "pct_first_time_passed": 33.33}, {"month": "March", "candidates": 7, "passed": 1, "pct_passed": 14.29, "first_timers": 6, "first_time_passed": 1, "pct_first_time_passed": 16.67}, {"month": "April", "candidates": 8, "passed": 4, "pct_passed": 50.0, "first_timers": 7, "first_time_passed": 3, "pct_first_time_passed": 42.86}, {"month": "May", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 9, "first_time_passed": 5, "pct_first_time_passed": 55.56}, {"month": "June", "candidates": 6, "passed": 2, "pct_passed": 33.33, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "July", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 7, "first_time_passed": 3, "pct_first_time_passed": 42.86}, {"month": "August", "candidates": 3, "passed": 2, "pct_passed": 66.67, "first_timers": 1, "first_time_passed": 0, "pct_first_time_passed": 0.0}, {"month": "September", "candidates": 6, "passed": 6, "pct_passed": 100.0, "first_timers": 3, "first_time_passed": 3, "pct_first_time_passed": 100.0}, {"month": "October", "candidates": 1, "passed": 0, "pct_passed": 0.0, "first_timers": 0, "first_time_passed": 0, "pct_first_time_passed": null}, {"month": "November", "candidates": 10, "passed": 6, "pct_passed": 60.0, "first_timers": 5, "first_time_passed": 3, "pct_first_time_passed": 60.0}, {"month": "December", "candidates": 7, "passed": 6, "pct_passed": 85.71, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}], "total": {"candidates": 78, "passed": 41, "pct_passed": 52.56, "first_timers": 55, "first_time_passed": 25, "pct_first_time_passed": 45.45}}, "2011": {"complete": true, "months": [{"month": "January", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 4, "first_time_passed": 2, "pct_first_time_passed": 50.0}, {"month": "February", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 6, "first_time_passed": 2, "pct_first_time_passed": 33.33}, {"month": "March", "candidates": 4, "passed": 2, "pct_passed": 50.0, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "April", "candidates": 6, "passed": 5, "pct_passed": 83.33, "first_timers": 6, "first_time_passed": 5, "pct_first_time_passed": 83.33}, {"month": "May", "candidates": 6, "passed": 2, "pct_passed": 33.33, "first_timers": 4, "first_time_passed": 1, "pct_first_time_passed": 25.0}, {"month": "June", "candidates": 5, "passed": 1, "pct_passed": 20.0, "first_timers": 4, "first_time_passed": 1, "pct_first_time_passed": 25.0}, {"month": "July", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 8, "first_time_passed": 4, "pct_first_time_passed": 50.0}, {"month": "August", "candidates": 4, "passed": 2, "pct_passed": 50.0, "first_timers": 2, "first_time_passed": 1, "pct_first_time_passed": 50.0}, {"month": "September", "candidates": 6, "passed": 5, "pct_passed": 83.33, "first_timers": 3, "first_time_passed": 3, "pct_first_time_passed": 100.0}, {"month": "October", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 6, "first_time_passed": 3, "pct_first_time_passed": 50.0}, {"month": "November", "candidates": 6, "passed": 4, "pct_passed": 66.67, "first_timers": 2, "first_time_passed": 1, "pct_first_time_passed": 50.0}, {"month": "December", "candidates": 5, "passed": 3, "pct_passed": 60.0, "first_timers": 4, "first_time_passed": 3, "pct_first_time_passed": 75.0}], "total": {"candidates": 78, "passed": 44, "pct_passed": 56.41, "first_timers": 52, "first_time_passed": 28, "pct_first_time_passed": 53.85}}, "2012": {"complete": true, "months": [{"month": "January", "candidates": 5, "passed": 4, "pct_passed": 80.0, "first_timers": 4, "first_time_passed": 4, "pct_first_time_passed": 100.0}, {"month": "February", "candidates": 3, "passed": 1, "pct_passed": 33.33, "first_timers": 2, "first_time_passed": 0, "pct_first_time_passed": 0.0}, {"month": "March", "candidates": 6, "passed": 2, "pct_passed": 33.33, "first_timers": 5, "first_time_passed": 2, "pct_first_time_passed": 40.0}, {"month": "April", "candidates": 5, "passed": 3, "pct_passed": 60.0, "first_timers": 2, "first_time_passed": 2, "pct_first_time_passed": 100.0}, {"month": "May", "candidates": 7, "passed": 3, "pct_passed": 42.86, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "June", "candidates": 5, "passed": 2, "pct_passed": 40.0, "first_timers": 4, "first_time_passed": 2, "pct_first_time_passed": 50.0}, {"month": "July", "candidates": 6, "passed": 3, "pct_passed": 50.0, "first_timers": 4, "first_time_passed": 3, "pct_first_time_passed": 75.0}, {"month": "August", "candidates": 9, "passed": 4, "pct_passed": 44.44, "first_timers": 8, "first_time_passed": 3, "pct_first_time_passed": 37.5}, {"month": "September", "candidates": 31, "passed": 23, "pct_passed": 74.19, "first_timers": 17, "first_time_passed": 11, "pct_first_time_passed": 64.71}, {"month": "October", "candidates": 5, "passed": 3, "pct_passed": 60.0, "first_timers": 4, "first_time_passed": 2, "pct_first_time_passed": 50.0}, {"month": "November", "candidates": 5, "passed": 5, "pct_passed": 100.0, "first_timers": 1, "first_time_passed": 1, "pct_first_time_passed": 100.0}, {"month": "December", "candidates": 7, "passed": 5, "pct_passed": 71.43, "first_timers": 5, "first_time_passed": 4, "pct_first_time_passed": 80.0}], "total": {"candidates": 94, "passed": 58, "pct_passed": 61.7, "first_timers": 59, "first_time_passed": 36, "pct_first_time_passed": 61.02}}, "2013": {"complete": true, "months": [{"month": "January", "candidates": 13, "passed": 10, "pct_passed": 76.92, "first_timers": 8, "first_time_passed": 6, "pct_first_time_passed": 75.0}, {"month": "February", "candidates": 10, "passed": 3, "pct_passed": 30.0, "first_timers": 7, "first_time_passed": 2, "pct_first_time_passed": 28.57}, {"month": "March", "candidates": 3, "passed": 3, "pct_passed": 100.0, "first_timers": 1, "first_time_passed": 1, "pct_first_time_passed": 100.0}, {"month": "April", "candidates": 11, "passed": 6, "pct_passed": 54.55, "first_timers": 8, "first_time_passed": 5, "pct_first_time_passed": 62.5}, {"month": "May", "candidates": 5, "passed": 2, "pct_passed": 40.0, "first_timers": 5, "first_time_passed": 2, "pct_first_time_passed": 40.0}, {"month": "June", "candidates": 10, "passed": 4, "pct_passed": 40.0, "first_timers": 6, "first_time_passed": 2, "pct_first_time_passed": 33.33}, {"month": "July", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 4, "first_time_passed": 4, "pct_first_time_passed": 100.0}, {"month": "August", "candidates": 3, "passed": 2, "pct_passed": 66.67, "first_timers": 1, "first_time_passed": 1, "pct_first_time_passed": 100.0}, {"month": "September", "candidates": 8, "passed": 2, "pct_passed": 25.0, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "October", "candidates": 5, "passed": 2, "pct_passed": 40.0, "first_timers": 2, "first_time_passed": 1, "pct_first_time_passed": 50.0}, {"month": "November", "candidates": 7, "passed": 6, "pct_passed": 85.71, "first_timers": 0, "first_time_passed": 0, "pct_first_time_passed": null}, {"month": "December", "candidates": 7, "passed": 4, "pct_passed": 57.14, "first_timers": 2, "first_time_passed": 2, "pct_first_time_passed": 100.0}], "total": {"candidates": 91, "passed": 49, "pct_passed": 53.85, "first_timers": 47, "first_time_passed": 28, "pct_first_time_passed": 59.57}}, "2014": {"complete": true, "months": [{"month": "January", "candidates": 12, "passed": 10, "pct_passed": 83.33, "first_timers": 7, "first_time_passed": 7, "pct_first_time_passed": 100.0}, {"month": "February", "candidates": 4, "passed": 3, "pct_passed": 75.0, "first_timers": 3, "first_time_passed": 3, "pct_first_time_passed": 100.0}, {"month": "March", "candidates": 4, "passed": 2, "pct_passed": 50.0, "first_timers": 2, "first_time_passed": 1, "pct_first_time_passed": 50.0}, {"month": "April", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 4, "first_time_passed": 4, "pct_first_time_passed": 100.0}, {"month": "May", "candidates": 4, "passed": 2, "pct_passed": 50.0, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "June", "candidates": 7, "passed": 5, "pct_passed": 71.43, "first_timers": 4, "first_time_passed": 4, "pct_first_time_passed": 100.0}, {"month": "July", "candidates": 16, "passed": 12, "pct_passed": 75.0, "first_timers": 10, "first_time_passed": 10, "pct_first_time_passed": 100.0}, {"month": "August", "candidates": 9, "passed": 6, "pct_passed": 66.67, "first_timers": 6, "first_time_passed": 5, "pct_first_time_passed": 83.33}, {"month": "September", "candidates": 6, "passed": 3, "pct_passed": 50.0, "first_timers": 4, "first_time_passed": 3, "pct_first_time_passed": 75.0}, {"month": "October", "candidates": 4, "passed": 3, "pct_passed": 75.0, "first_timers": 2, "first_time_passed": 2, "pct_first_time_passed": 100.0}, {"month": "November", "candidates": 9, "passed": 6, "pct_passed": 66.67, "first_timers": 1, "first_time_passed": 1, "pct_first_time_passed": 100.0}, {"month": "December", "candidates": 9, "passed": 5, "pct_passed": 55.56, "first_timers": 3, "first_time_passed": 3, "pct_first_time_passed": 100.0}], "total": {"candidates": 93, "passed": 62, "pct_passed": 66.67, "first_timers": 49, "first_time_passed": 45, "pct_first_time_passed": 91.84}}, "2015": {"complete": true, "months": [{"month": "January", "candidates": 10, "passed": 6, "pct_passed": 60.0, "first_timers": 2, "first_time_passed": 1, "pct_first_time_passed": 50.0}, {"month": "February", "candidates": 8, "passed": 3, "pct_passed": 37.5, "first_timers": 3, "first_time_passed": 1, "pct_first_time_passed": 33.33}, {"month": "March", "candidates": 6, "passed": 6, "pct_passed": 100.0, "first_timers": 3, "first_time_passed": 3, "pct_first_time_passed": 100.0}, {"month": "April", "candidates": 10, "passed": 4, "pct_passed": 40.0, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "May", "candidates": 13, "passed": 4, "pct_passed": 30.77, "first_timers": 3, "first_time_passed": 2, "pct_first_time_passed": 66.67}, {"month": "June", "candidates": 13, "passed": 1, "pct_passed": 7.69, "first_timers": 6, "first_time_passed": 1, "pct_first_time_passed": 16.67}, {"month": "July", "candidates": 129, "passed": 108, "pct_passed": 83.72, "first_timers": 104, "first_time_passed": 103, "pct_first_time_passed": 99.04}, {"month": "August", "candidates": 172, "passed": 136, "pct_passed": 79.07, "first_timers": 120, "first_time_passed": 119, "pct_first_time_passed": 99.17}, {"month": "September", "candidates": 158, "passed": 122, "pct_passed": 77.22, "first_timers": 119, "first_time_passed": 118, "pct_first_time_passed": 99.16}, {"month": "October", "candidates": 121, "passed": 88, "pct_passed": 72.73, "first_timers": 58, "first_time_passed": 58, "pct_first_time_passed": 100.0}, {"month": "November", "candidates": 84, "passed": 64, "pct_passed": 76.19, "first_timers": 59, "first_time_passed": 56, "pct_first_time_passed": 94.92}, {"month": "December", "candidates": 138, "passed": 103, "pct_passed": 74.64, "first_timers": 88, "first_time_passed": 87, "pct_first_time_passed": 98.86}], "total": {"candidates": 862, "passed": 645, "pct_passed": 74.83, "first_timers": 568, "first_time_passed": 551, "pct_first_time_passed": 97.01}}, "2016": {"complete": true, "months": [{"month": "January", "candidates": 83, "passed": 75, "pct_passed": 90.36, "first_timers": 51, "first_time_passed": 47, "pct_first_time_passed": 92.16}, {"month": "February", "candidates": 89, "passed": 85, "pct_passed": 95.51, "first_timers": 59, "first_time_passed": 58, "pct_first_time_passed": 98.31}, {"month": "March", "candidates": 121, "passed": 114, "pct_passed": 94.21, "first_timers": 91, "first_time_passed": 89, "pct_first_time_passed": 97.8}, {"month": "April", "candidates": 47, "passed": 44, "pct_passed": 93.62, "first_timers": 40, "first_time_passed": 39, "pct_first_time_passed": 97.5}, {"month": "May", "candidates": 74, "passed": 69, "pct_passed": 93.24, "first_timers": 61, "first_time_passed": 61, "pct_first_time_passed": 100.0}, {"month": "June", "candidates": 112, "passed": 106, "pct_passed": 94.64, "first_timers": 103, "first_time_passed": 100, "pct_first_time_passed": 97.09}, {"month": "July", "candidates": 91, "passed": 70, "pct_passed": 76.92, "first_timers": 85, "first_time_passed": 69, "pct_first_time_passed": 81.18}, {"month": "August", "candidates": 104, "passed": 82, "pct_passed": 78.85, "first_timers": 97, "first_time_passed": 80, "pct_first_time_passed": 82.47}, {"month": "September", "candidates": 109, "passed": 77, "pct_passed": 70.64, "first_timers": 103, "first_time_passed": 76, "pct_first_time_passed": 73.79}, {"month": "October", "candidates": 80, "passed": 55, "pct_passed": 68.75, "first_timers": 57, "first_time_passed": 38, "pct_first_time_passed": 66.67}, {"month": "November", "candidates": 94, "passed": 77, "pct_passed": 81.91, "first_timers": 68, "first_time_passed": 62, "pct_first_time_passed": 91.18}, {"month": "December", "candidates": 92, "passed": 75, "pct_passed": 81.52, "first_timers": 76, "first_time_passed": 63, "pct_first_time_passed": 82.89}], "total": {"candidates": 1096, "passed": 929, "pct_passed": 84.76, "first_timers": 891, "first_time_passed": 782, "pct_first_time_passed": 87.77}}, "2017": {"complete": true, "months": [{"month": "January", "candidates": 70, "passed": 44, "pct_passed": 62.86, "first_timers": 47, "first_time_passed": 29, "pct_first_time_passed": 61.7}, {"month": "February", "candidates": 75, "passed": 58, "pct_passed": 77.33, "first_timers": 54, "first_time_passed": 41, "pct_first_time_passed": 75.93}, {"month": "March", "candidates": 105, "passed": 77, "pct_passed": 73.33, "first_timers": 83, "first_time_passed": 65, "pct_first_time_passed": 78.31}, {"month": "April", "candidates": 69, "passed": 53, "pct_passed": 76.81, "first_timers": 47, "first_time_passed": 36, "pct_first_time_passed": 76.6}, {"month": "May", "candidates": 82, "passed": 61, "pct_passed": 74.39, "first_timers": 62, "first_time_passed": 48, "pct_first_time_passed": 77.42}, {"month": "June", "candidates": 131, "passed": 97, "pct_passed": 74.05, "first_timers": 110, "first_time_passed": 82, "pct_first_time_passed": 74.55}, {"month": "July", "candidates": 87, "passed": 74, "pct_passed": 85.06, "first_timers": 60, "first_time_passed": 51, "pct_first_time_passed": 85.0}, {"month": "August", "candidates": 145, "passed": 111, "pct_passed": 76.55, "first_timers": 123, "first_time_passed": 97, "pct_first_time_passed": 78.86}, {"month": "September", "candidates": 129, "passed": 101, "pct_passed": 78.29, "first_timers": 111, "first_time_passed": 88, "pct_first_time_passed": 79.28}, {"month": "October", "candidates": 105, "passed": 82, "pct_passed": 78.1, "first_timers": 68, "first_time_passed": 54, "pct_first_time_passed": 79.41}, {"month": "November", "candidates": 83, "passed": 68, "pct_passed": 81.93, "first_timers": 61, "first_time_passed": 50, "pct_first_time_passed": 81.97}, {"month": "December", "candidates": 101, "passed": 76, "pct_passed": 75.25, "first_timers": 88, "first_time_passed": 69, "pct_first_time_passed": 78.41}], "total": {"candidates": 1182, "passed": 902, "pct_passed": 76.31, "first_timers": 914, "first_time_passed": 710, "pct_first_time_passed": 77.68}}, "2018": {"complete": true, "months": [{"month": "January", "candidates": 72, "passed": 61, "pct_passed": 84.72, "first_timers": 49, "first_time_passed": 42, "pct_first_time_passed": 85.71}, {"month": "February", "candidates": 81, "passed": 65, "pct_passed": 80.25, "first_timers": 59, "first_time_passed": 44, "pct_first_time_passed": 74.58}, {"month": "March", "candidates": 112, "passed": 90, "pct_passed": 80.36, "first_timers": 87, "first_time_passed": 71, "pct_first_time_passed": 81.61}, {"month": "April", "candidates": 65, "passed": 39, "pct_passed": 60.0, "first_timers": 46, "first_time_passed": 28, "pct_first_time_passed": 60.87}, {"month": "May", "candidates": 88, "passed": 69, "pct_passed": 78.41, "first_timers": 65, "first_time_passed": 53, "pct_first_time_passed": 81.54}, {"month": "June", "candidates": 105, "passed": 83, "pct_passed": 79.05, "first_timers": 90, "first_time_passed": 74, "pct_first_time_passed": 82.22}, {"month": "July", "candidates": 89, "passed": 51, "pct_passed": 57.3, "first_timers": 64, "first_time_passed": 42, "pct_first_time_passed": 65.62}, {"month": "August", "candidates": 137, "passed": 92, "pct_passed": 67.15, "first_timers": 117, "first_time_passed": 78, "pct_first_time_passed": 66.67}, {"month": "September", "candidates": 132, "passed": 76, "pct_passed": 57.58, "first_timers": 115, "first_time_passed": 69, "pct_first_time_passed": 60.0}, {"month": "October", "candidates": 134, "passed": 105, "pct_passed": 78.36, "first_timers": 72, "first_time_passed": 53, "pct_first_time_passed": 73.61}, {"month": "November", "candidates": 106, "passed": 86, "pct_passed": 81.13, "first_timers": 70, "first_time_passed": 56, "pct_first_time_passed": 80.0}, {"month": "December", "candidates": 112, "passed": 88, "pct_passed": 78.57, "first_timers": 89, "first_time_passed": 70, "pct_first_time_passed": 78.65}], "total": {"candidates": 1233, "passed": 905, "pct_passed": 73.4, "first_timers": 923, "first_time_passed": 680, "pct_first_time_passed": 73.67}}, "2019": {"complete": true, "months": [{"month": "January", "candidates": 86, "passed": 60, "pct_passed": 69.77, "first_timers": 50, "first_time_passed": 35, "pct_first_time_passed": 70.0}, {"month": "February", "candidates": 83, "passed": 60, "pct_passed": 72.29, "first_timers": 62, "first_time_passed": 43, "pct_first_time_passed": 69.35}, {"month": "March", "candidates": 105, "passed": 75, "pct_passed": 71.43, "first_timers": 87, "first_time_passed": 68, "pct_first_time_passed": 78.16}, {"month": "April", "candidates": 89, "passed": 59, "pct_passed": 66.29, "first_timers": 47, "first_time_passed": 32, "pct_first_time_passed": 68.09}, {"month": "May", "candidates": 79, "passed": 60, "pct_passed": 75.95, "first_timers": 53, "first_time_passed": 38, "pct_first_time_passed": 71.7}, {"month": "June", "candidates": 114, "passed": 78, "pct_passed": 68.42, "first_timers": 92, "first_time_passed": 65, "pct_first_time_passed": 70.65}, {"month": "July", "candidates": 106, "passed": 84, "pct_passed": 79.25, "first_timers": 76, "first_time_passed": 60, "pct_first_time_passed": 78.95}, {"month": "August", "candidates": 151, "passed": 124, "pct_passed": 82.12, "first_timers": 121, "first_time_passed": 100, "pct_first_time_passed": 82.64}, {"month": "September", "candidates": 154, "passed": 121, "pct_passed": 78.57, "first_timers": 130, "first_time_passed": 105, "pct_first_time_passed": 80.77}, {"month": "October", "candidates": 83, "passed": 62, "pct_passed": 74.7, "first_timers": 56, "first_time_passed": 47, "pct_first_time_passed": 83.93}, {"month": "November", "candidates": 90, "passed": 73, "pct_passed": 81.11, "first_timers": 57, "first_time_passed": 48, "pct_first_time_passed": 84.21}, {"month": "December", "candidates": 108, "passed": 78, "pct_passed": 72.22, "first_timers": 84, "first_time_passed": 61, "pct_first_time_passed": 72.62}], "total": {"candidates": 1248, "passed": 934, "pct_passed": 74.84, "first_timers": 915, "first_time_passed": 702, "pct_first_time_passed": 76.72}}, "2020": {"complete": true, "months": [{"month": "January", "candidates": 58, "passed": 45, "pct_passed": 77.59, "first_timers": 41, "first_time_passed": 31, "pct_first_time_passed": 75.61}, {"month": "February", "candidates": 72, "passed": 53, "pct_passed": 73.61, "first_timers": 54, "first_time_passed": 40, "pct_first_time_passed": 74.07}, {"month": "March", "candidates": 64, "passed": 50, "pct_passed": 78.12, "first_timers": 51, "first_time_passed": 41, "pct_first_time_passed": 80.39}, {"month": "April", "candidates": 26, "passed": 18, "pct_passed": 69.23, "first_timers": 18, "first_time_passed": 13, "pct_first_time_passed": 72.22}, {"month": "May", "candidates": 93, "passed": 74, "pct_passed": 79.57, "first_timers": 76, "first_time_passed": 56, "pct_first_time_passed": 73.68}, {"month": "June", "candidates": 106, "passed": 82, "pct_passed": 77.36, "first_timers": 80, "first_time_passed": 64, "pct_first_time_passed": 80.0}, {"month": "July", "candidates": 106, "passed": 84, "pct_passed": 79.25, "first_timers": 76, "first_time_passed": 60, "pct_first_time_passed": 78.95}, {"month": "August", "candidates": 110, "passed": 92, "pct_passed": 83.64, "first_timers": 91, "first_time_passed": 78, "pct_first_time_passed": 85.71}, {"month": "September", "candidates": 126, "passed": 98, "pct_passed": 77.78, "first_timers": 107, "first_time_passed": 84, "pct_first_time_passed": 78.5}, {"month": "October", "candidates": 75, "passed": 54, "pct_passed": 72.0, "first_timers": 55, "first_time_passed": 41, "pct_first_time_passed": 74.55}, {"month": "November", "candidates": 84, "passed": 59, "pct_passed": 70.24, "first_timers": 71, "first_time_passed": 50, "pct_first_time_passed": 70.42}, {"month": "December", "candidates": 87, "passed": 59, "pct_passed": 67.82, "first_timers": 65, "first_time_passed": 43, "pct_first_time_passed": 66.15}], "total": {"candidates": 1007, "passed": 768, "pct_passed": 76.27, "first_timers": 785, "first_time_passed": 601, "pct_first_time_passed": 76.56}}, "2021": {"complete": true, "months": [{"month": "January", "candidates": 58, "passed": 41, "pct_passed": 70.69, "first_timers": 39, "first_time_passed": 27, "pct_first_time_passed": 69.23}, {"month": "February", "candidates": 83, "passed": 53, "pct_passed": 63.86, "first_timers": 63, "first_time_passed": 38, "pct_first_time_passed": 60.32}, {"month": "March", "candidates": 109, "passed": 83, "pct_passed": 76.15, "first_timers": 85, "first_time_passed": 66, "pct_first_time_passed": 77.65}, {"month": "April", "candidates": 87, "passed": 68, "pct_passed": 78.16, "first_timers": 64, "first_time_passed": 51, "pct_first_time_passed": 79.69}, {"month": "May", "candidates": 79, "passed": 60, "pct_passed": 75.95, "first_timers": 47, "first_time_passed": 37, "pct_first_time_passed": 78.72}, {"month": "June", "candidates": 105, "passed": 88, "pct_passed": 83.81, "first_timers": 81, "first_time_passed": 71, "pct_first_time_passed": 87.65}, {"month": "July", "candidates": 82, "passed": 58, "pct_passed": 70.73, "first_timers": 60, "first_time_passed": 43, "pct_first_time_passed": 71.67}, {"month": "August", "candidates": 128, "passed": 107, "pct_passed": 83.59, "first_timers": 77, "first_time_passed": 66, "pct_first_time_passed": 85.71}, {"month": "September", "candidates": 165, "passed": 133, "pct_passed": 80.61, "first_timers": 99, "first_time_passed": 79, "pct_first_time_passed": 79.8}, {"month": "October", "candidates": 76, "passed": 59, "pct_passed": 77.63, "first_timers": 57, "first_time_passed": 42, "pct_first_time_passed": 73.68}, {"month": "November", "candidates": 64, "passed": 50, "pct_passed": 78.12, "first_timers": 50, "first_time_passed": 43, "pct_first_time_passed": 86.0}, {"month": "December", "candidates": 95, "passed": 75, "pct_passed": 78.95, "first_timers": 74, "first_time_passed": 58, "pct_first_time_passed": 78.38}], "total": {"candidates": 1131, "passed": 875, "pct_passed": 77.37, "first_timers": 796, "first_time_passed": 621, "pct_first_time_passed": 78.02}}, "2022": {"complete": true, "months": [{"month": "January", "candidates": 55, "passed": 46, "pct_passed": 83.64, "first_timers": 43, "first_time_passed": 37, "pct_first_time_passed": 86.05}, {"month": "February", "candidates": 62, "passed": 45, "pct_passed": 72.58, "first_timers": 39, "first_time_passed": 29, "pct_first_time_passed": 74.36}, {"month": "March", "candidates": 90, "passed": 65, "pct_passed": 72.22, "first_timers": 68, "first_time_passed": 51, "pct_first_time_passed": 75.0}, {"month": "April", "candidates": 58, "passed": 48, "pct_passed": 82.76, "first_timers": 38, "first_time_passed": 33, "pct_first_time_passed": 86.84}, {"month": "May", "candidates": 63, "passed": 44, "pct_passed": 69.84, "first_timers": 44, "first_time_passed": 33, "pct_first_time_passed": 75.0}, {"month": "June", "candidates": 92, "passed": 73, "pct_passed": 79.35, "first_timers": 81, "first_time_passed": 64, "pct_first_time_passed": 79.01}, {"month": "July", "candidates": 65, "passed": 49, "pct_passed": 75.38, "first_timers": 46, "first_time_passed": 36, "pct_first_time_passed": 78.26}, {"month": "August", "candidates": 106, "passed": 81, "pct_passed": 76.42, "first_timers": 88, "first_time_passed": 66, "pct_first_time_passed": 75.0}, {"month": "September", "candidates": 120, "passed": 94, "pct_passed": 78.33, "first_timers": 104, "first_time_passed": 81, "pct_first_time_passed": 77.88}, {"month": "October", "candidates": 97, "passed": 75, "pct_passed": 77.32, "first_timers": 77, "first_time_passed": 60, "pct_first_time_passed": 77.92}, {"month": "November", "candidates": 84, "passed": 69, "pct_passed": 82.14, "first_timers": 63, "first_time_passed": 52, "pct_first_time_passed": 82.54}, {"month": "December", "candidates": 107, "passed": 77, "pct_passed": 71.96, "first_timers": 89, "first_time_passed": 65, "pct_first_time_passed": 73.03}], "total": {"candidates": 999, "passed": 766, "pct_passed": 76.68, "first_timers": 780, "first_time_passed": 607, "pct_first_time_passed": 77.82}}, "2023": {"complete": true, "months": [{"month": "January", "candidates": 54, "passed": 46, "pct_passed": 85.19, "first_timers": 41, "first_time_passed": 34, "pct_first_time_passed": 82.93}, {"month": "February", "candidates": 75, "passed": 58, "pct_passed": 77.33, "first_timers": 46, "first_time_passed": 38, "pct_first_time_passed": 82.61}, {"month": "March", "candidates": 84, "passed": 73, "pct_passed": 86.9, "first_timers": 68, "first_time_passed": 59, "pct_first_time_passed": 86.76}, {"month": "April", "candidates": 61, "passed": 50, "pct_passed": 81.97, "first_timers": 44, "first_time_passed": 35, "pct_first_time_passed": 79.55}, {"month": "May", "candidates": 66, "passed": 52, "pct_passed": 78.79, "first_timers": 53, "first_time_passed": 42, "pct_first_time_passed": 79.25}, {"month": "June", "candidates": 134, "passed": 118, "pct_passed": 88.06, "first_timers": 124, "first_time_passed": 109, "pct_first_time_passed": 87.9}, {"month": "July", "candidates": 88, "passed": 69, "pct_passed": 78.41, "first_timers": 73, "first_time_passed": 63, "pct_first_time_passed": 86.3}, {"month": "August", "candidates": 101, "passed": 75, "pct_passed": 74.26, "first_timers": 82, "first_time_passed": 66, "pct_first_time_passed": 80.49}, {"month": "September", "candidates": 98, "passed": 76, "pct_passed": 77.55, "first_timers": 82, "first_time_passed": 63, "pct_first_time_passed": 76.83}, {"month": "October", "candidates": 87, "passed": 61, "pct_passed": 70.11, "first_timers": 65, "first_time_passed": 46, "pct_first_time_passed": 70.77}, {"month": "November", "candidates": 77, "passed": 59, "pct_passed": 76.62, "first_timers": 54, "first_time_passed": 41, "pct_first_time_passed": 75.93}, {"month": "December", "candidates": 87, "passed": 61, "pct_passed": 70.11, "first_timers": 75, "first_time_passed": 51, "pct_first_time_passed": 68.0}], "total": {"candidates": 1012, "passed": 798, "pct_passed": 78.85, "first_timers": 807, "first_time_passed": 647, "pct_first_time_passed": 80.17}}, "2024": {"complete": true, "months": [{"month": "January", "candidates": 74, "passed": 66, "pct_passed": 89.19, "first_timers": 55, "first_time_passed": 49, "pct_first_time_passed": 89.09}, {"month": "February", "candidates": 74, "passed": 57, "pct_passed": 77.03, "first_timers": 47, "first_time_passed": 35, "pct_first_time_passed": 74.47}, {"month": "March", "candidates": 75, "passed": 60, "pct_passed": 80.0, "first_timers": 61, "first_time_passed": 48, "pct_first_time_passed": 78.69}, {"month": "April", "candidates": 43, "passed": 32, "pct_passed": 74.42, "first_timers": 28, "first_time_passed": 22, "pct_first_time_passed": 78.57}, {"month": "May", "candidates": 84, "passed": 71, "pct_passed": 84.52, "first_timers": 65, "first_time_passed": 53, "pct_first_time_passed": 81.54}, {"month": "June", "candidates": 106, "passed": 88, "pct_passed": 83.02, "first_timers": 91, "first_time_passed": 75, "pct_first_time_passed": 82.42}, {"month": "July", "candidates": 85, "passed": 66, "pct_passed": 77.65, "first_timers": 71, "first_time_passed": 56, "pct_first_time_passed": 78.87}, {"month": "August", "candidates": 115, "passed": 95, "pct_passed": 82.61, "first_timers": 92, "first_time_passed": 75, "pct_first_time_passed": 81.52}, {"month": "September", "candidates": 102, "passed": 78, "pct_passed": 76.47, "first_timers": 89, "first_time_passed": 69, "pct_first_time_passed": 77.53}, {"month": "October", "candidates": 75, "passed": 59, "pct_passed": 78.67, "first_timers": 47, "first_time_passed": 38, "pct_first_time_passed": 80.85}, {"month": "November", "candidates": 80, "passed": 64, "pct_passed": 80.0, "first_timers": 63, "first_time_passed": 52, "pct_first_time_passed": 82.54}, {"month": "December", "candidates": 100, "passed": 75, "pct_passed": 75.0, "first_timers": 86, "first_time_passed": 65, "pct_first_time_passed": 75.58}], "total": {"candidates": 1013, "passed": 811, "pct_passed": 80.06, "first_timers": 795, "first_time_passed": 637, "pct_first_time_passed": 80.13}}, "2025": {"complete": true, "months": [{"month": "January", "candidates": 73, "passed": 57, "pct_passed": 78.08, "first_timers": 52, "first_time_passed": 42, "pct_first_time_passed": 80.77}, {"month": "February", "candidates": 67, "passed": 51, "pct_passed": 76.12, "first_timers": 48, "first_time_passed": 37, "pct_first_time_passed": 77.08}, {"month": "March", "candidates": 111, "passed": 84, "pct_passed": 75.68, "first_timers": 88, "first_time_passed": 66, "pct_first_time_passed": 75.0}, {"month": "April", "candidates": 58, "passed": 40, "pct_passed": 68.97, "first_timers": 33, "first_time_passed": 23, "pct_first_time_passed": 69.7}, {"month": "May", "candidates": 83, "passed": 57, "pct_passed": 68.67, "first_timers": 54, "first_time_passed": 38, "pct_first_time_passed": 70.37}, {"month": "June", "candidates": 113, "passed": 92, "pct_passed": 81.42, "first_timers": 94, "first_time_passed": 79, "pct_first_time_passed": 84.04}, {"month": "July", "candidates": 107, "passed": 80, "pct_passed": 74.77, "first_timers": 84, "first_time_passed": 64, "pct_first_time_passed": 76.19}, {"month": "August", "candidates": 114, "passed": 91, "pct_passed": 79.82, "first_timers": 83, "first_time_passed": 70, "pct_first_time_passed": 84.34}, {"month": "September", "candidates": 150, "passed": 110, "pct_passed": 73.33, "first_timers": 139, "first_time_passed": 106, "pct_first_time_passed": 76.26}, {"month": "October", "candidates": 107, "passed": 93, "pct_passed": 86.92, "first_timers": 65, "first_time_passed": 56, "pct_first_time_passed": 86.15}, {"month": "November", "candidates": 74, "passed": 58, "pct_passed": 78.38, "first_timers": 58, "first_time_passed": 48, "pct_first_time_passed": 82.76}, {"month": "December", "candidates": 102, "passed": 82, "pct_passed": 80.39, "first_timers": 85, "first_time_passed": 70, "pct_first_time_passed": 82.35}], "total": {"candidates": 1159, "passed": 895, "pct_passed": 77.22, "first_timers": 883, "first_time_passed": 699, "pct_first_time_passed": 79.16}}, "2026": {"complete": false, "months": [{"month": "January", "candidates": 57, "passed": 48, "pct_passed": 84.21, "first_timers": 34, "first_time_passed": 28, "pct_first_time_passed": 82.35}, {"month": "February", "candidates": 90, "passed": 63, "pct_passed": 70.0, "first_timers": 69, "first_time_passed": 50, "pct_first_time_passed": 72.46}, {"month": "March", "candidates": 87, "passed": 70, "pct_passed": 80.46, "first_timers": 71, "first_time_passed": 60, "pct_first_time_passed": 84.51}, {"month": "April", "candidates": 51, "passed": 35, "pct_passed": 68.63, "first_timers": 40, "first_time_passed": 27, "pct_first_time_passed": 67.5}, {"month": "May", "candidates": 62, "passed": 41, "pct_passed": 66.13, "first_timers": 42, "first_time_passed": 28, "pct_first_time_passed": 66.67}], "total": {"candidates": 347, "passed": 257, "pct_passed": 74.06, "first_timers": 256, "first_time_passed": 193, "pct_first_time_passed": 75.39}}}};
+
+const MONTH_ABBR = {
+  January:'Jan', February:'Feb', March:'Mar', April:'Apr', May:'May', June:'Jun',
+  July:'Jul', August:'Aug', September:'Sep', October:'Oct', November:'Nov', December:'Dec'
+};
+
+function fmtPct(n){ return (Math.round(n*10)/10).toFixed(1) + '%'; }
+function fmtNum(n){ return n.toLocaleString('en-US'); }
+
+// Repeat-taker figures are derived from the Board's own published
+// totals: repeat candidates = all candidates minus first-timers.
+// Guards: skip rows where the derivation would be nonsensical
+// (no repeat candidates, or source-data anomalies producing
+// impossible rates).
+function deriveRepeat(row){
+  if(row.first_timers == null || row.first_time_passed == null){
+    return {cand: null, passed: null, rate: null};
+  }
+  const cand = row.candidates - row.first_timers;
+  const passed = row.passed - row.first_time_passed;
+  if(cand <= 0 || passed < 0 || passed > cand){
+    return {cand: Math.max(cand, 0), passed: null, rate: null};
+  }
+  return {cand, passed, rate: passed / cand * 100};
+}
+
+async function loadData(){
+  try{
+    const res = await fetch('data/cplee_stats.json', {cache:'no-store'});
+    if(res.ok){
+      const data = await res.json();
+      if(data && data.years) return data;
+    }
+  }catch(e){ /* fall through to fallback */ }
+  document.getElementById('error-banner').style.display = 'block';
+  return FALLBACK_DATA;
+}
+
+function buildYearlyDatasets(data, years, avgAll){
+  const overall = years.map(y => data.years[y].total.pct_passed);
+  const firstTime = years.map(y => data.years[y].total.pct_first_time_passed);
+  const barColors = years.map(y => data.years[y].complete ? 'rgba(47,124,140,0.85)' : 'rgba(47,124,140,0.38)');
+
+  return {
+    labels: years.map(y => data.years[y].complete ? y : y + ' (YTD)'),
+    datasets: [
+      {
+        type:'bar', label:'Overall pass rate', data: overall,
+        backgroundColor: barColors, borderColor:'rgba(47,124,140,0.85)', borderWidth: 1,
+        borderRadius: 4, maxBarThickness: 46, order: 2
+      },
+      {
+        type:'line', label:'First-time pass rate', data: firstTime,
+        borderColor:'#D98C6A', backgroundColor:'#D98C6A',
+        pointRadius:3, pointBackgroundColor:'#D98C6A', tension:0.3, borderWidth:2, order:1
+      },
+      {
+        type:'line', label:'Repeat-taker pass rate', data: years.map(y => deriveRepeat(data.years[y].total).rate),
+        borderColor:'#B23A48', backgroundColor:'#B23A48', borderDash:[2,4],
+        pointRadius:3, pointBackgroundColor:'#B23A48', tension:0.3, borderWidth:2, order:1, spanGaps:true
+      },
+      {
+        type:'line', label:'All-time average', data: years.map(()=>avgAll),
+        borderColor:'#6E8C96', borderDash:[6,4], pointRadius:0, borderWidth:1.5, order:0
+      }
+    ]
+  };
+}
+
+function buildMonthlyDatasets(monthRows, avgAll){
+  const labels = monthRows.map(m => MONTH_ABBR[m.month] || m.month);
+  return {
+    labels,
+    datasets: [
+      {
+        type:'bar', label:'Overall pass rate', data: monthRows.map(m=>m.pct_passed),
+        backgroundColor:'rgba(47,124,140,0.85)', borderRadius:4, maxBarThickness:42, order:2
+      },
+      {
+        type:'line', label:'First-time pass rate', data: monthRows.map(m=>m.pct_first_time_passed),
+        borderColor:'#D98C6A', backgroundColor:'#D98C6A',
+        pointRadius:3, pointBackgroundColor:'#D98C6A', tension:0.3, borderWidth:2, order:1
+      },
+      {
+        type:'line', label:'Repeat-taker pass rate', data: monthRows.map(m => deriveRepeat(m).rate),
+        borderColor:'#B23A48', backgroundColor:'#B23A48', borderDash:[2,4],
+        pointRadius:3, pointBackgroundColor:'#B23A48', tension:0.3, borderWidth:2, order:1, spanGaps:true
+      },
+      {
+        type:'line', label:'All-time average', data: labels.map(()=>avgAll),
+        borderColor:'#6E8C96', borderDash:[6,4], pointRadius:0, borderWidth:1.5, order:0
+      }
+    ]
+  };
+}
+
+function commonScales(){
+  return {
+    y:{
+      min:0, max:100,
+      ticks:{ callback: v => v + '%', font:{family:"'Spline Sans Mono', monospace", size:11}, color:'#567586' },
+      grid:{ color:'#DDE7EA' }
+    },
+    x:{
+      ticks:{ font:{family:"'Public Sans', sans-serif", size:11}, color:'#567586' },
+      grid:{ display:false }
+    }
+  };
+}
+
+function makeChart(canvasId, chartData){
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  return new Chart(ctx, {
+    data: chartData,
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? false : { duration: 500 },
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{
+          callbacks:{
+            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%`
+          }
+        }
+      },
+      scales: commonScales()
+    }
+  });
+}
+
+// The chart library loads from a CDN, which ad blockers and some
+// networks occasionally block. Try a second CDN before giving up,
+// and if charts truly can't load, swap in data tables instead of
+// leaving blank space.
+function ensureChartLib(){
+  return new Promise(resolve => {
+    if (typeof Chart !== 'undefined') return resolve(true);
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
+    s.onload = () => resolve(typeof Chart !== 'undefined');
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
+}
+
+function chartOrFallback(canvasId, chartData, chartsAvailable, fallbackHTML){
+  if(chartsAvailable){
+    try{
+      makeChart(canvasId, chartData);
+      return;
+    }catch(e){ /* fall through to the table fallback */ }
+  }
+  const canvas = document.getElementById(canvasId);
+  const box = canvas && canvas.parentElement;
+  if(box){
+    box.style.height = 'auto';
+    box.innerHTML = fallbackHTML;
+  }
+}
+
+function yearlyFallbackTable(data, years){
+  const rows = years.map(y => {
+    const t = data.years[y].total;
+    const r = deriveRepeat(t);
+    const label = data.years[y].complete ? y : y + ' (YTD)';
+    const ft = t.pct_first_time_passed == null ? '—' : fmtPct(t.pct_first_time_passed);
+    return `<tr><td>${label}</td><td>${fmtPct(t.pct_passed)}</td><td>${ft}</td><td>${r.rate === null ? '—' : fmtPct(r.rate)}</td></tr>`;
+  }).join('');
+  return `<p class="chart-caption" style="margin:0 0 0.75rem;">The interactive chart couldn't load in this browser (often an ad blocker or network filter) — here are the same figures as a table:</p>
+    <table class="data-table"><thead><tr><th>Year</th><th>% Passed</th><th>% First-time</th><th>% Repeat</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderScaleBand(data, years, currentYear, avgAll){
+  const rates = years.map(y => ({year: y, rate: data.years[y].total.pct_passed}));
+  const nowRate = data.years[currentYear].total.pct_passed;
+  const completed = rates.filter(r => r.year !== currentYear || data.years[currentYear].complete);
+  const pool = completed.length ? completed : rates;
+  let lo = pool[0], hi = pool[0];
+  pool.forEach(r => { if(r.rate < lo.rate) lo = r; if(r.rate > hi.rate) hi = r; });
+
+  document.getElementById('scale-range').style.left = lo.rate + '%';
+  document.getElementById('scale-range').style.width = (hi.rate - lo.rate) + '%';
+  document.getElementById('scale-avg').style.left = avgAll + '%';
+
+  const now = document.getElementById('scale-now');
+  now.style.left = nowRate + '%';
+
+  const ytdTag = data.years[currentYear].complete ? currentYear : currentYear + ' YTD';
+  const nowLabel = document.getElementById('scale-now-label');
+  nowLabel.style.left = Math.min(Math.max(nowRate, 7), 93) + '%';
+  nowLabel.innerHTML = ytdTag + ' · <span class="val">' + fmtPct(nowRate) + '</span>';
+
+  const avgLabel = document.getElementById('scale-avg-label');
+  avgLabel.style.left = Math.min(Math.max(avgAll, 8), 92) + '%';
+  avgLabel.innerHTML = 'all-time avg <span class="val">' + fmtPct(avgAll) + '</span>';
+
+  const diff = nowRate - avgAll;
+  const dir = Math.abs(diff) < 0.5 ? 'right at' : (diff > 0 ? 'above' : 'below');
+  document.getElementById('scale-note').innerHTML =
+    'The shaded band spans the easiest full year on record (<strong>' + hi.year + '</strong>, ' + fmtPct(hi.rate) +
+    ') to the toughest (<strong>' + lo.year + '</strong>, ' + fmtPct(lo.rate) + '). ' +
+    'So far, ' + currentYear + ' is running ' + (dir === 'right at' ? 'right at' : Math.abs(diff).toFixed(1) + ' points ' + dir) + ' the all-time average.';
+
+  document.getElementById('scale-sr').textContent =
+    'Scale from 0 to 100 percent. Historical yearly pass rates range from ' + fmtPct(lo.rate) + ' in ' + lo.year +
+    ' to ' + fmtPct(hi.rate) + ' in ' + hi.year + '. The all-time average is ' + fmtPct(avgAll) +
+    '. The current year-to-date rate is ' + fmtPct(nowRate) + '.';
+}
+
+(async function init(){
+  const data = await loadData();
+  const years = Object.keys(data.years).sort((a,b)=>Number(a)-Number(b));
+  const currentYear = years[years.length-1];
+  const currentYearData = data.years[currentYear];
+
+  let totalCand = 0, totalPassed = 0;
+  years.forEach(y => { totalCand += data.years[y].total.candidates; totalPassed += data.years[y].total.passed; });
+  const avgAll = totalCand ? (totalPassed/totalCand*100) : 0;
+
+  const latestMonth = currentYearData.months[currentYearData.months.length-1];
+  const ytdLabel = currentYearData.complete ? currentYear : `${currentYear} (YTD)`;
+
+  // ---- Signature scale band ----
+  renderScaleBand(data, years, currentYear, avgAll);
+
+  // ---- KPIs ----
+  document.getElementById('kpi1-label').textContent = `${ytdLabel} overall pass rate`;
+  document.getElementById('kpi1-value').textContent = fmtPct(currentYearData.total.pct_passed);
+  const d1 = currentYearData.total.pct_passed - avgAll;
+  document.getElementById('kpi1-delta').textContent = `${d1>=0?'+':''}${d1.toFixed(1)} pts vs. all-time avg`;
+  document.getElementById('kpi1-delta').className = 'kpi-delta ' + (Math.abs(d1)<0.05?'flat':(d1>0?'up':'down'));
+
+  document.getElementById('kpi2-label').textContent = `${ytdLabel} first-time pass rate`;
+  document.getElementById('kpi2-value').textContent = fmtPct(currentYearData.total.pct_first_time_passed);
+  const allTimeFT = (() => {
+    let c=0,p=0;
+    years.forEach(y=>{
+      const t = data.years[y].total;
+      if(t.first_timers != null && t.first_time_passed != null){ c+=t.first_timers; p+=t.first_time_passed; }
+    });
+    return c? p/c*100:0;
+  })();
+  const d2 = currentYearData.total.pct_first_time_passed - allTimeFT;
+  document.getElementById('kpi2-delta').textContent = `${d2>=0?'+':''}${d2.toFixed(1)} pts vs. all-time avg`;
+  document.getElementById('kpi2-delta').className = 'kpi-delta ' + (Math.abs(d2)<0.05?'flat':(d2>0?'up':'down'));
+
+  document.getElementById('kpi3-value').textContent = `${MONTH_ABBR[latestMonth.month]} ${currentYear}`;
+  document.getElementById('kpi3-delta').textContent = `${fmtPct(latestMonth.pct_passed)} passed · ${fmtNum(latestMonth.candidates)} sat for the exam`;
+
+  document.getElementById('kpi4-value').textContent = fmtPct(avgAll);
+  document.getElementById('kpi4-delta').textContent = `across ${years[0]}–${years[years.length-1]}, ${fmtNum(totalCand)} candidates`;
+
+  // ---- Repeat test-taker card ----
+  const rptNow = deriveRepeat(currentYearData.total);
+  let rptCandAll = 0, rptPassAll = 0;
+  years.forEach(y => {
+    const r = deriveRepeat(data.years[y].total);
+    if(r.rate !== null){ rptCandAll += r.cand; rptPassAll += r.passed; }
+  });
+  const rptRateAll = rptCandAll ? rptPassAll/rptCandAll*100 : 0;
+  const firstRptYear = years.find(y => deriveRepeat(data.years[y].total).rate !== null);
+
+  document.getElementById('rp1-label').textContent = `${ytdLabel} repeat-taker pass rate`;
+  document.getElementById('rp1-value').textContent = rptNow.rate === null ? '—' : fmtPct(rptNow.rate);
+  document.getElementById('rp1-sub').textContent = `${fmtNum(rptNow.cand)} repeat candidates so far this year`;
+
+  document.getElementById('rp2-value').textContent = fmtPct(rptRateAll);
+  document.getElementById('rp2-sub').textContent = `across ${fmtNum(rptCandAll)} repeat attempts since ${firstRptYear}`;
+
+  const gap = currentYearData.total.pct_first_time_passed - (rptNow.rate ?? 0);
+  document.getElementById('rp3-value').textContent = `+${gap.toFixed(1)} pts`;
+  document.getElementById('rp3-sub').textContent = `first-time ${fmtPct(currentYearData.total.pct_first_time_passed)} vs. repeat ${rptNow.rate === null ? '—' : fmtPct(rptNow.rate)}`;
+
+  document.getElementById('repeat-note').textContent =
+    `Derived from the Board's own published totals (repeat candidates = all candidates − first-timers). ` +
+    `For ${ytdLabel}, the Board reports ${fmtPct(currentYearData.total.pct_passed)} overall and ${fmtPct(currentYearData.total.pct_first_time_passed)} first-time — ` +
+    `the non-reported repeat-taker rate is ${rptNow.rate === null ? 'not derivable this period' : fmtPct(rptNow.rate)}.`;
+
+  // ---- Yearly chart ----
+  const chartsAvailable = await ensureChartLib();
+  document.getElementById('yearly-title').textContent = `Yearly overview (${years[0]}–${years[years.length-1]})`;
+  chartOrFallback('yearlyChart', buildYearlyDatasets(data, years, avgAll), chartsAvailable, yearlyFallbackTable(data, years));
+  document.getElementById('yearly-sr').textContent = years.map(y => {
+    const t = data.years[y].total;
+    const r = deriveRepeat(t);
+    const ft = t.pct_first_time_passed == null ? 'first-time data not published' : fmtPct(t.pct_first_time_passed) + ' first-time';
+    return `${y}: ${fmtPct(t.pct_passed)} overall, ${ft}, ${r.rate === null ? 'repeat rate unavailable' : fmtPct(r.rate) + ' repeat'}`;
+  }).join('. ');
+
+  // ---- Current year chart ----
+  document.getElementById('current-year-title').textContent = `${ytdLabel} by month`;
+  chartOrFallback('currentYearChart', buildMonthlyDatasets(currentYearData.months, avgAll), chartsAvailable,
+    '<p class="chart-caption" style="margin:0;">The interactive chart couldn\'t load in this browser (often an ad blocker or network filter) — the exact monthly figures are in the table beside this.</p>');
+  document.getElementById('current-sr').textContent = currentYearData.months.map(m => {
+    const r = deriveRepeat(m);
+    return `${m.month}: ${fmtPct(m.pct_passed)} overall, ${fmtPct(m.pct_first_time_passed)} first-time, ${r.rate === null ? 'repeat rate unavailable' : fmtPct(r.rate) + ' repeat'}, ${fmtNum(m.candidates)} candidates`;
+  }).join('. ');
+
+  // ---- Table ----
+  const tbody = document.getElementById('month-table-body');
+  currentYearData.months.forEach(m => {
+    const r = deriveRepeat(m);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${m.month}</td><td>${fmtNum(m.candidates)}</td><td>${fmtPct(m.pct_passed)}</td><td>${fmtPct(m.pct_first_time_passed)}</td><td>${r.rate === null ? '—' : fmtPct(r.rate)}</td>`;
+    tbody.appendChild(tr);
+  });
+  const totalR = deriveRepeat(currentYearData.total);
+  const totalTr = document.createElement('tr');
+  totalTr.className = 'total-row';
+  totalTr.innerHTML = `<td>${ytdLabel} total</td><td>${fmtNum(currentYearData.total.candidates)}</td><td>${fmtPct(currentYearData.total.pct_passed)}</td><td>${fmtPct(currentYearData.total.pct_first_time_passed)}</td><td>${totalR.rate === null ? '—' : fmtPct(totalR.rate)}</td>`;
+  tbody.appendChild(totalTr);
+
+  // ---- Updated chip ----
+  const updated = new Date(data.last_updated);
+  const updatedStr = isNaN(updated) ? 'Updated date unavailable' : updated.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+  document.getElementById('updated-text').textContent = `Last updated ${updatedStr} · checked weekly`;
+})();
+</script>
+</body>
+</html>
